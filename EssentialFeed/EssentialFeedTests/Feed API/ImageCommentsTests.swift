@@ -16,7 +16,7 @@ class ImageCommentsRemoteLoader {
 		self.client = client
 	}
 	
-	func loadImageCommenst(from url: URL , completion: (Any) -> Void ) {
+	func loadImageComments(from url: URL , completion: (Any) -> Void ) {
 		client.get(from: url) { _ in }
 	}
 }
@@ -33,7 +33,7 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		let client = HTTPClientSpy()
 		let sut = ImageCommentsRemoteLoader(client: client)
 		
-		sut.loadImageCommenst(from: url) { _ in }
+		sut.loadImageComments(from: url) { _ in }
 		
 		XCTAssertEqual(client.requestedURLs, [url])
 	}

@@ -10,14 +10,19 @@ import XCTest
 import EssentialFeed
 
 class ImageCommentsRemoteLoader {
+	typealias Result = Swift.Result<Any, Error>
 	private let client : HTTPClient
 	
 	init(client: HTTPClient) {
 		self.client = client
 	}
 	
-	func loadImageComments(from url: URL , completion: (Any) -> Void ) {
-		client.get(from: url) { _ in }
+	enum Error: Swift.Error {
+			case connectivity
+	}
+	
+	func loadImageComments(from url: URL , completion: @escaping (Any) -> Void ) {
+		client.get(from: url,completion: completion)
 	}
 }
 
@@ -49,11 +54,32 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		XCTAssertEqual(client.requestedURLs, [url, url])
 	}
 	
+	func test_loadImageComments_deliversErrorOnClientError() {
+		let (sut, client) = makeSUT()
+		
+		expect(sut: sut, toCompleteWith: .failure(.connectivity)) {
+			client.complete(with: anyNSError())
+		}
+	}
+	
 	//MARK: - Helpers
 	
 	func makeSUT() -> (sut: ImageCommentsRemoteLoader, client: HTTPClientSpy) {
 		let client = HTTPClientSpy()
 		let sut = ImageCommentsRemoteLoader(client: client)
 		return (sut, client)
+	}
+	
+	private func expect(sut: ImageCommentsRemoteLoader, toCompleteWith expectedResult: ImageCommentsRemoteLoader.Result, when  action: () -> Void  ) {
+		
+		let exp = expectation(description: "Wait for load comments completion")
+		
+		sut.loadImageComments(from: anyURL()) { _ in
+			exp.fulfill()
+		}
+		
+		action()
+		
+		wait(for: [exp], timeout: 1.0)
 	}
 }

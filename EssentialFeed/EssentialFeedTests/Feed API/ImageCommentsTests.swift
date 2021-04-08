@@ -18,11 +18,19 @@ class ImageCommentsRemoteLoader {
 	}
 	
 	enum Error: Swift.Error {
-			case connectivity
+		case connectivity
+		case invalidData
 	}
 	
 	func loadImageComments(from url: URL , completion: @escaping (Result) -> Void ) {
-		client.get(from: url) { _ in
+		client.get(from: url) { result in
+			if let response = try? result.get() {
+				if response.1.statusCode != 200 {
+					completion(.failure(.invalidData))
+					return
+				}
+			}
+			
 			completion(.failure(.connectivity))
 		}
 	}
@@ -61,6 +69,18 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		
 		expect(sut, toCompleteWith: .failure(.connectivity)) {
 			client.complete(with: anyNSError())
+		}
+	}
+	
+	func test_loadImageComments_deliversErrorOnNon200HTTPResponse() {
+		let (sut, client) = makeSUT()
+		
+		let samples = [199, 201, 300, 400, 500]
+		
+		samples.enumerated().forEach { index, code in
+			expect(sut, toCompleteWith: .failure(.invalidData), when: {
+				client.complete(withStatusCode: code, data: anyData(), at: index)
+			})
 		}
 	}
 	

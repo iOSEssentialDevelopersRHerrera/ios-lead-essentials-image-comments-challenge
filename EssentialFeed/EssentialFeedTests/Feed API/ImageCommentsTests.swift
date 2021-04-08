@@ -23,7 +23,8 @@ class ImageCommentsRemoteLoader {
 	}
 	
 	func loadImageComments(from url: URL , completion: @escaping (Result) -> Void ) {
-		client.get(from: url) { result in
+		client.get(from: url) { [weak self] result in
+			guard self != nil else { return }
 			if let response = try? result.get() {
 				if response.1.statusCode != 200 {
 					completion(.failure(.invalidData))
@@ -82,6 +83,19 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 				client.complete(withStatusCode: code, data: anyData(), at: index)
 			})
 		}
+	}
+	
+	func test_loadImageDataComments_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+		let client = HTTPClientSpy()
+		var sut: ImageCommentsRemoteLoader? = ImageCommentsRemoteLoader(client: client)
+		
+		var capturedResults = [ImageCommentsRemoteLoader.Result]()
+		_ = sut?.loadImageComments(from: anyURL()) { capturedResults.append($0) }
+		
+		sut = nil
+		client.complete(withStatusCode: 200, data: anyData())
+		
+		XCTAssertTrue(capturedResults.isEmpty)
 	}
 	
 	//MARK: - Helpers

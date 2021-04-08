@@ -85,7 +85,7 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		}
 	}
 	
-	func test_loadImageDataComments_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+	func test_loadImageComments_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
 		let client = HTTPClientSpy()
 		var sut: ImageCommentsRemoteLoader? = ImageCommentsRemoteLoader(client: client)
 		

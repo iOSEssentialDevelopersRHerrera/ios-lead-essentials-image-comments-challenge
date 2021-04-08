@@ -21,8 +21,10 @@ class ImageCommentsRemoteLoader {
 			case connectivity
 	}
 	
-	func loadImageComments(from url: URL , completion: @escaping (Any) -> Void ) {
-		client.get(from: url,completion: completion)
+	func loadImageComments(from url: URL , completion: @escaping (Result) -> Void ) {
+		client.get(from: url) { _ in
+			completion(.failure(.connectivity))
+		}
 	}
 }
 
@@ -57,7 +59,7 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 	func test_loadImageComments_deliversErrorOnClientError() {
 		let (sut, client) = makeSUT()
 		
-		expect(sut: sut, toCompleteWith: .failure(.connectivity)) {
+		expect(sut, toCompleteWith: .failure(.connectivity)) {
 			client.complete(with: anyNSError())
 		}
 	}
@@ -72,16 +74,23 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		return (sut, client)
 	}
 	
-	private func expect(sut: ImageCommentsRemoteLoader, toCompleteWith expectedResult: ImageCommentsRemoteLoader.Result, when  action: () -> Void  ) {
-		
-		let exp = expectation(description: "Wait for load comments completion")
-		
-		sut.loadImageComments(from: anyURL()) { _ in
-			exp.fulfill()
+	private func expect(_ sut: ImageCommentsRemoteLoader, toCompleteWith expectedResult: ImageCommentsRemoteLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+			let exp = expectation(description: "Wait for load comments completion")
+			
+			sut.loadImageComments(from: anyURL()) { receivedResult in
+				switch (receivedResult, expectedResult) {
+				case let (.failure(receivedError), .failure(expectedError)):
+					XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+					
+				default:
+					XCTFail("Expected result \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+				}
+				
+				exp.fulfill()
+			}
+			
+			action()
+			
+			wait(for: [exp], timeout: 1.0)
 		}
-		
-		action()
-		
-		wait(for: [exp], timeout: 1.0)
-	}
 }

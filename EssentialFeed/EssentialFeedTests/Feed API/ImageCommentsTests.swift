@@ -9,7 +9,7 @@
 import XCTest
 import EssentialFeed
 
-class ImageCommentsRemoteLoader {
+class RemoteImageCommentsLoader {
 	typealias Result = Swift.Result<Any, Error>
 	private let client : HTTPClient
 	
@@ -82,9 +82,9 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 	
 	func test_loadImageComments_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
 		let client = HTTPClientSpy()
-		var sut: ImageCommentsRemoteLoader? = ImageCommentsRemoteLoader(client: client)
+		var sut: RemoteImageCommentsLoader? = RemoteImageCommentsLoader(client: client)
 		
-		var capturedResults = [ImageCommentsRemoteLoader.Result]()
+		var capturedResults = [RemoteImageCommentsLoader.Result]()
 		_ = sut?.loadImageComments(from: anyURL()) { capturedResults.append($0) }
 		
 		sut = nil
@@ -104,15 +104,15 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 	
 	//MARK: - Helpers
 	
-	func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ImageCommentsRemoteLoader, client: HTTPClientSpy) {
+	func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: RemoteImageCommentsLoader, client: HTTPClientSpy) {
 		let client = HTTPClientSpy()
-		let sut = ImageCommentsRemoteLoader(client: client)
+		let sut = RemoteImageCommentsLoader(client: client)
 		trackForMemoryLeaks(sut, file: file, line: line)
 		trackForMemoryLeaks(client, file: file, line: line)
 		return (sut, client)
 	}
 	
-	private func expect(_ sut: ImageCommentsRemoteLoader, toCompleteWith expectedResult: ImageCommentsRemoteLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+	private func expect(_ sut: RemoteImageCommentsLoader, toCompleteWith expectedResult: RemoteImageCommentsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
 			let exp = expectation(description: "Wait for load comments completion")
 			
 			sut.loadImageComments(from: anyURL()) { receivedResult in

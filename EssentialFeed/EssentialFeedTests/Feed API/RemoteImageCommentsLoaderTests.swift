@@ -32,7 +32,7 @@ class RemoteImageCommentsLoader {
 	}
 }
 
-class ImageCommentsRemoteLoaderTests: XCTestCase {
+class RemoteImageCommentsLoaderTests: XCTestCase {
 	func test_init_doesNotRequestAnyURL() {
 		let (_ , client) = makeSUT()
 		

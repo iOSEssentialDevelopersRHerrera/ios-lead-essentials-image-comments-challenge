@@ -25,14 +25,9 @@ class ImageCommentsRemoteLoader {
 	func loadImageComments(from url: URL , completion: @escaping (Result) -> Void ) {
 		client.get(from: url) { [weak self] result in
 			guard self != nil else { return }
-			if let response = try? result.get() {
-				if response.1.statusCode != 200 {
-					completion(.failure(.invalidData))
-					return
-				}
-			}
-			
-			completion(.failure(.connectivity))
+			completion(result
+						.mapError { _ in Error.connectivity }
+						.flatMap{ _ in .failure(Error.invalidData)})
 		}
 	}
 }
@@ -96,6 +91,15 @@ class ImageCommentsRemoteLoaderTests: XCTestCase {
 		client.complete(withStatusCode: 200, data: anyData())
 		
 		XCTAssertTrue(capturedResults.isEmpty)
+	}
+	
+	func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
+		let (sut, client) = makeSUT()
+		
+		expect(sut, toCompleteWith: .failure(.invalidData), when: {
+			let invalidJSON = Data("invalid json".utf8)
+			client.complete(withStatusCode: 200, data: invalidJSON)
+		})
 	}
 	
 	//MARK: - Helpers

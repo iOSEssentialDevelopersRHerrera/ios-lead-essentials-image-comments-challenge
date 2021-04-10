@@ -93,7 +93,7 @@ class RemoteImageCommentsLoaderTests: XCTestCase {
 		XCTAssertTrue(capturedResults.isEmpty)
 	}
 	
-	func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
+	func test_loadImageComments_deliversErrorOn200HTTPResponseWithInvalidJSON() {
 		let (sut, client) = makeSUT()
 		
 		expect(sut, toCompleteWith: .failure(.invalidData), when: {

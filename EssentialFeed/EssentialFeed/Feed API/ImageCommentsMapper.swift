@@ -20,10 +20,14 @@ final class ImageCommentsMapper {
 	}
 	
 	static func map(_ data: Data, from response: HTTPURLResponse) throws -> [RemoteFeedItem] {
-		guard response.isOK, let root = try? JSONDecoder().decode(Root.self, from: data) else {
+		guard isOK(response: response), let root = try? JSONDecoder().decode(Root.self, from: data) else {
 			throw RemoteImageCommentsLoader.Error.invalidData
 		}
 		
 		return root.items
+	}
+	
+	private static func isOK (response: HTTPURLResponse) -> Bool {
+		return 200 <= response.statusCode && 299 >= response.statusCode
 	}
 }

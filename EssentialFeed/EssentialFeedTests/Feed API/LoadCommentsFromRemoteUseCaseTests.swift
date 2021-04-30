@@ -67,13 +67,17 @@ class LoadCommentsFromRemoteUseCaseTests: XCTestCase {
 		}
 	}
 	
-	func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJSONList() {
+	func test_load_deliversNoItemsOn2xxHTTPResponseWithEmptyJSONList() {
 		let (sut, client) = makeSUT()
 		
-		expect(sut, toCompleteWith: .success([]), when: {
-			let emptyListJSON = makeItemsJSON([])
-			client.complete(withStatusCode: 200, data: emptyListJSON)
-		})
+		let samples = [200, 201, 250, 270, 299]
+		
+		samples.enumerated().forEach { index, code in
+			expect(sut, toCompleteWith: .success([]), when: {
+				let emptyListJSON = makeItemsJSON([])
+				client.complete(withStatusCode: code, data: emptyListJSON, at: index)
+			})
+		}
 	}
 	
 	func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {

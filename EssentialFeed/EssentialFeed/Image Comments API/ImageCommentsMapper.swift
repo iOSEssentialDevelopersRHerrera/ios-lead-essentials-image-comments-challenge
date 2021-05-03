@@ -1,16 +1,7 @@
 //
-//  ImageCommentsMapper.swift
-//  EssentialFeed
-//
-//  Created by Ricardo Herrera Petit on 4/28/21.
-//  Copyright © 2021 Essential Developer. All rights reserved.
-//
 
-import Foundation
 
-//
-//  Copyright © 2019 Essential Developer. All rights reserved.
-//
+
 
 import Foundation
 

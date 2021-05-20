@@ -87,6 +87,7 @@
 		F675F663263B9CF3001C0493 /* ImageComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F675F662263B9CF3001C0493 /* ImageComment.swift */; };
 		F67F78872654CCED00C1D60E /* SharedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67F78862654CCED00C1D60E /* SharedLocalizationTests.swift */; };
 		F67F78882654CE0700C1D60E /* Shared.strings in Resources */ = {isa = PBXBuildFile; fileRef = F67F788A2654CE0700C1D60E /* Shared.strings */; };
+		F67F788E2655F00100C1D60E /* SharedLocalizationTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67F788D2655F00100C1D60E /* SharedLocalizationTestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +197,7 @@
 		F67F78892654CE0700C1D60E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Shared.strings; sourceTree = "<group>"; };
 		F67F788B2654CE0B00C1D60E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Shared.strings; sourceTree = "<group>"; };
 		F67F788C2654CE0C00C1D60E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Shared.strings"; sourceTree = "<group>"; };
+		F67F788D2655F00100C1D60E /* SharedLocalizationTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTestHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +330,7 @@
 			children = (
 				0844768E21FCB24E00439BE9 /* XCTestCase+MemoryLeakTracking.swift */,
 				081C0DB222491EEF00AC754E /* SharedTestHelpers.swift */,
+				F67F788D2655F00100C1D60E /* SharedLocalizationTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -843,6 +846,7 @@
 				086BE4842232725E004CDC26 /* FeedStoreSpy.swift in Sources */,
 				081C0DB322491EEF00AC754E /* SharedTestHelpers.swift in Sources */,
 				089C40D42216C37400DE552E /* CacheFeedUseCaseTests.swift in Sources */,
+				F67F788E2655F00100C1D60E /* SharedLocalizationTestHelpers.swift in Sources */,
 				086044FC233E1A3B005ECD22 /* FeedImageDataStoreSpy.swift in Sources */,
 				08604500233E2294005ECD22 /* CoreDataFeedImageDataStoreTests.swift in Sources */,
 				087546942272387900542C32 /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */,

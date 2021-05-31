@@ -10,7 +10,7 @@ public protocol FeedImageCellControllerDelegate {
 	func didCancelImageRequest()
 }
 
-public final class FeedImageCellController: NSObject, CellController, ResourceView, ResourceLoadingView, ResourceErrorView {
+public final class FeedImageCellController: NSObject{
 	public typealias ResourceViewModel = UIImage
 	private let viewModel: FeedImageViewModel
 	private let delegate: FeedImageCellControllerDelegate
@@ -20,8 +20,9 @@ public final class FeedImageCellController: NSObject, CellController, ResourceVi
 		self.viewModel = viewModel
 		self.delegate = delegate
 	}
-	
-	
+}
+
+extension FeedImageCellController: CellController {
 	
 	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		1
@@ -54,6 +55,13 @@ public final class FeedImageCellController: NSObject, CellController, ResourceVi
 		delegate.didCancelImageRequest()
 	}
 	
+	private func releaseCellForReuse() {
+		cell = nil
+	}
+}
+	
+extension FeedImageCellController: ResourceView, ResourceLoadingView, ResourceErrorView {
+	
 	public func display(_ viewModel: UIImage) {
 		cell?.feedImageView.setImageAnimated(viewModel)
 	}
@@ -64,9 +72,5 @@ public final class FeedImageCellController: NSObject, CellController, ResourceVi
 	
 	public func display(_ viewModel: ResourceErrorViewModel) {
 		cell?.feedImageRetryButton.isHidden = viewModel.message == nil
-	}
-	
-	private func releaseCellForReuse() {
-		cell = nil
 	}
 }

@@ -12,8 +12,8 @@ public protocol CellController {
 }
 
 public extension CellController {
-	func preload(){}
-	func cancelLoad(){}
+	func preload() {}
+	func cancelLoad() {}
 }
 
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {

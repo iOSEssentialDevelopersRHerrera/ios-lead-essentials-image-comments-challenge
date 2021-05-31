@@ -37,7 +37,7 @@ final class FeedViewAdapter: ResourceView {
 					return image
 				})
 			
-			return CellController(view, view, view)
+			return CellController(view)
 		})
 	}
 }

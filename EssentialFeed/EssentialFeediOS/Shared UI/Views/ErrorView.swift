@@ -5,12 +5,12 @@
 import UIKit
 
 public final class ErrorView: UIButton {
-
-	
 	public var message: String? {
 		get { return isVisible ? title(for: .normal) : nil }
 		set { setMessageAnimated(newValue) }
 	}
+	
+	public var onHide: (() -> Void)?
 	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -37,12 +37,6 @@ public final class ErrorView: UIButton {
 		
 	}
 	
-	public override func awakeFromNib() {
-		super.awakeFromNib()
-		
-		hideMessage()
-	}
-	
 	private var isVisible: Bool {
 		return alpha > 0
 	}
@@ -64,7 +58,7 @@ public final class ErrorView: UIButton {
 		}
 	}
 	
-	@IBAction private func hideMessageAnimated() {
+	@objc private func hideMessageAnimated() {
 		UIView.animate(
 			withDuration: 0.25,
 			animations: { self.alpha = 0 },
@@ -77,6 +71,7 @@ public final class ErrorView: UIButton {
 		setTitle(nil, for: .normal)
 		alpha = 0
 		contentEdgeInsets = .init(top: -2.5, left: 0, bottom: -2.5, right: 0)
+		onHide?()
 	}
 	
 }

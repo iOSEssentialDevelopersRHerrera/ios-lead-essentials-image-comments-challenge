@@ -22,6 +22,7 @@ public final class FeedImageCellController: NSObject{
 		self.delegate = delegate
 		self.selection = selection
 	}
+	
 }
 
 extension FeedImageCellController: UITableViewDataSource, UITableViewDelegate, UITableViewDataSourcePrefetching {
